@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://code.createjs.com/createjs-2013.02.12.min.js"></script>
+	<script>
+		var stage;
+		var queue;
+
+		function init() {
+			stage = new createjs.Stage("myCanvas");
+			queue=new createjs.LoadQueue(false);
+			queue.installPlugin(createjs.Sound);
+			queue.addEventListener("complete", handleComplete);
+			queue.loadManifest([{id:"pic", src : "assets/pic.png.jpg"}, {id:"Sound", src:"assets/Katy-Perry-Firework-Official.mp3"}]);
+			}
+
+		function handleComplete(event){
+
+			var ball = new createjs.Shape();
+			ball.addEventListener("click", handleClick);
+			ball.graphics.beginFill("#000000").drawCircle(0, 0, 100);
+			ball.x=50;
+			ball.y=200;
+			createjs.Tween.get(ball, {loop:true}).to({x:450}, 3000).to({x:50}, 3000);
+			createjs.Ticker.addEventListener("tick", tick);
+			stage.addChild(ball);
+
+
+		}
+          function handleClick(event){
+			  var bmp=new createjs.Bitmap(queue.getResult("pic"));
+			  bmp.x=Math.random()*900;
+			  bmp.y=Math.random()*900;
+			  stage.addChild(bmp);
+          	createjs.Sound.play("Sound");
+          }
+
+           function tick(event){
+			stage.update();
+		}
+	</script>
+</head>
+<body onload = "init()">
+    <canvas id="myCanvas" width="800" height="800">
+    	alternative content
+    </canvas>
+</body>
+</html>
